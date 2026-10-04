@@ -10,6 +10,8 @@ def after_install():
 def ensure_gateway():
 	"""Создаёт TBank Settings и Payment Gateway, чтобы шлюз появился в LMS."""
 	if not frappe.db.exists("TBank Settings", "TBank"):
+		# ignore_mandatory: TerminalKey и пароль обязательны в форме, но
+		# заполнять их должен администратор, а не установщик.
 		frappe.get_doc(
 			{
 				"doctype": "TBank Settings",
@@ -20,7 +22,7 @@ def ensure_gateway():
 				"taxation": "usn_income",
 				"vat": "none",
 			}
-		).insert(ignore_permissions=True)
+		).insert(ignore_permissions=True, ignore_mandatory=True)
 
 	if not frappe.db.exists("Payment Gateway", "TBank"):
 		frappe.get_doc(
