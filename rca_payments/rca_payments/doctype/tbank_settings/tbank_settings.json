@@ -1,0 +1,195 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "field:gateway_name",
+ "creation": "2026-10-04 12:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "gateway_name",
+  "enabled",
+  "column_break_head",
+  "test_terminal",
+  "section_break_terminal",
+  "terminal_key",
+  "password",
+  "column_break_terminal",
+  "api_url",
+  "section_break_notifications",
+  "notification_url",
+  "column_break_notifications",
+  "success_url",
+  "fail_url",
+  "section_break_receipt",
+  "send_receipt",
+  "receipt_item_name",
+  "column_break_receipt",
+  "taxation",
+  "vat",
+  "section_break_diagnostics",
+  "last_status"
+ ],
+ "fields": [
+  {
+   "fieldname": "gateway_name",
+   "fieldtype": "Data",
+   "label": "Название шлюза",
+   "reqd": 1,
+   "unique": 1,
+   "in_list_view": 1,
+   "default": "TBank",
+   "description": "Имя записи. Должно совпадать с Payment Gateway."
+  },
+  {
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Приём платежей включён",
+   "default": "0"
+  },
+  {
+   "fieldname": "column_break_head",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "test_terminal",
+   "fieldtype": "Check",
+   "label": "Тестовый терминал",
+   "description": "Пометка для себя: у тестового терминала свои TerminalKey и пароль."
+  },
+  {
+   "fieldname": "section_break_terminal",
+   "fieldtype": "Section Break",
+   "label": "Терминал Т-Бизнеса"
+  },
+  {
+   "fieldname": "terminal_key",
+   "fieldtype": "Data",
+   "label": "TerminalKey",
+   "reqd": 1,
+   "description": "Личный кабинет интернет-эквайринга → Магазины → Терминалы."
+  },
+  {
+   "fieldname": "password",
+   "fieldtype": "Password",
+   "label": "Пароль терминала",
+   "reqd": 1,
+   "description": "Пароль терминала, не пароль от личного кабинета."
+  },
+  {
+   "fieldname": "column_break_terminal",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "api_url",
+   "fieldtype": "Data",
+   "label": "Адрес API",
+   "default": "https://securepay.tinkoff.ru/v2/"
+  },
+  {
+   "fieldname": "section_break_notifications",
+   "fieldtype": "Section Break",
+   "label": "Уведомления"
+  },
+  {
+   "fieldname": "notification_url",
+   "fieldtype": "Data",
+   "label": "URL уведомлений",
+   "read_only": 1,
+   "description": "Укажите этот адрес в кабинете Т-Бизнеса как URL для уведомлений (POST)."
+  },
+  {
+   "fieldname": "column_break_notifications",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "success_url",
+   "fieldtype": "Data",
+   "label": "SuccessURL",
+   "description": "Необязательно: пусто — вернём на страницу курса."
+  },
+  {
+   "fieldname": "fail_url",
+   "fieldtype": "Data",
+   "label": "FailURL",
+   "description": "Необязательно."
+  },
+  {
+   "fieldname": "section_break_receipt",
+   "fieldtype": "Section Break",
+   "label": "Чек 54-ФЗ"
+  },
+  {
+   "fieldname": "send_receipt",
+   "fieldtype": "Check",
+   "label": "Передавать чек в запросе",
+   "description": "Включайте только если у терминала НЕТ подключённой онлайн-кассы: иначе чек формирует сам Т-Банк."
+  },
+  {
+   "fieldname": "receipt_item_name",
+   "fieldtype": "Data",
+   "label": "Название услуги в чеке",
+   "default": "Оплата обучения"
+  },
+  {
+   "fieldname": "column_break_receipt",
+   "fieldtype": "Column Break",
+   "label": ""
+  },
+  {
+   "fieldname": "taxation",
+   "fieldtype": "Select",
+   "label": "Система налогообложения",
+   "default": "usn_income",
+   "options": "osn\nusn_income\nusn_income_outcome\nesn\npat"
+  },
+  {
+   "fieldname": "vat",
+   "fieldtype": "Select",
+   "label": "НДС",
+   "default": "none",
+   "options": "none\nvat0\nvat10\nvat20\nvat110\nvat120"
+  },
+  {
+   "fieldname": "section_break_diagnostics",
+   "fieldtype": "Section Break",
+   "label": "Диагностика"
+  },
+  {
+   "fieldname": "last_status",
+   "fieldtype": "Small Text",
+   "label": "Последний ответ Т-Банка",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-10-04 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "RCA Payments",
+ "name": "TBank Settings",
+ "naming_rule": "By fieldname",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 0
+}
