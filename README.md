@@ -10,9 +10,35 @@
   и возвращает `PaymentURL`, LMS открывает его в браузере ученицы.
 - `POST /api/method/rca_payments.tbank.notify` — приём уведомлений банка.
   Проверяет подпись Token, отмечает счёт оплаченным и выдаёт доступ
-  (`lms.lms.utils.complete_enrollment`).
+  (`lms.lms.utils.complete_enrollment`), затем переводит сделку в CRM
+  в статус «Оплачено».
+- `POST /api/method/rca_payments.checkout.checkout` — гостевое оформление заказа с лендинга:
+  находит или заводит пользователя, создаёт сделку в CRM и счёт в LMS,
+  возвращает ссылку на платёжную форму Т-Банка.
 - `reconcile_pending_payments()` — раз в час сверяет неоплаченные счета через
   `GetState`, если уведомление не дошло.
+
+## Оформление заказа с лендинга
+
+`POST /api/method/rca_payments.checkout.checkout`, `Content-Type: application/json`
+(или обычная форма). Гостевой, не чаще 10 раз в час с одного IP.
+
+Поля: `name`, `email`, `course` (name курса), `consent` (обязательно `true`),
+`consent_version`; необязательные — `telegram_id`, `telegram_username`,
+`utm_source`, `utm_medium`, `utm_campaign`.
+
+Ответ — всегда HTTP 200 и JSON:
+
+```json
+{"message": {"ok": true, "already_enrolled": false,
+             "payment_url": "https://securepay.tinkoff.ru/...", "payment": "ACC-PAY-2026-00001"}}
+{"message": {"ok": false, "error": "invalid_email", "message": "Похоже, в адресе почты опечатка…"}}
+```
+
+Цена берётся **только** из `LMS Course.course_price`: сумму из запроса эндпоинт
+не читает. Если у человека уже есть неоплаченный счёт на этот курс младше часа,
+он переиспользуется, а не создаётся заново; если человек уже записан на курс,
+счёт не создаётся вовсе и возвращается `already_enrolled: true`.
 
 ## Как это работает в Frappe
 
