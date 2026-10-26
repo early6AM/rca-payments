@@ -12,7 +12,7 @@
   Проверяет подпись Token, отмечает счёт оплаченным и выдаёт доступ
   (`lms.lms.utils.complete_enrollment`), затем переводит сделку в CRM
   в статус «Оплачено».
-- `POST /api/method/rca_payments.checkout` — гостевое оформление заказа с лендинга:
+- `POST /api/method/rca_payments.checkout.checkout` — гостевое оформление заказа с лендинга:
   находит или заводит пользователя, создаёт сделку в CRM и счёт в LMS,
   возвращает ссылку на платёжную форму Т-Банка.
 - `reconcile_pending_payments()` — раз в час сверяет неоплаченные счета через
@@ -20,7 +20,7 @@
 
 ## Оформление заказа с лендинга
 
-`POST /api/method/rca_payments.checkout`, `Content-Type: application/json`
+`POST /api/method/rca_payments.checkout.checkout`, `Content-Type: application/json`
 (или обычная форма). Гостевой, не чаще 10 раз в час с одного IP.
 
 Поля: `name`, `email`, `course` (name курса), `consent` (обязательно `true`),
