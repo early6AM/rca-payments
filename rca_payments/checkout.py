@@ -11,6 +11,7 @@
 """
 
 import frappe
+import frappe.rate_limiter
 from frappe.utils import add_to_date, now
 
 from rca_payments.checkout_rules import (

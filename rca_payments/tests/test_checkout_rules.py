@@ -179,6 +179,11 @@ class TestDocumentFields(unittest.TestCase):
 		self.assertEqual(fields["status"], STATUS_NEW)
 		self.assertEqual(fields["first_name"], "Анна")
 		self.assertEqual(fields["email"], "anna@example.ru")
+		# CRM Deal обнуляет свой email без записи в contacts — проверяем, что контакт есть
+		self.assertEqual(len(fields["contacts"]), 1)
+		self.assertEqual(fields["contacts"][0]["email"], "anna@example.ru")
+		self.assertEqual(fields["contacts"][0]["full_name"], "Анна")
+		self.assertEqual(fields["contacts"][0]["is_primary"], 1)
 		self.assertEqual(fields["rca_consent_at"], "2026-10-25 12:00:00")
 		self.assertEqual(fields["rca_consent_version"], "1.0")
 		self.assertEqual(fields["rca_consent_ip"], "10.0.0.7")

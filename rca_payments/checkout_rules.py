@@ -190,11 +190,23 @@ def find_reusable_payment(rows, now, max_age_minutes=PENDING_MINUTES):
 
 
 def build_deal_fields(data, consent_at, ip=""):
-	"""Поля CRM Deal из заявки. Согласие фиксируем с временем и IP."""
+	"""Поля CRM Deal из заявки. Согласие фиксируем с временем и IP.
+
+	email кладём ещё и в child-таблицу contacts: CRM Deal при валидации
+	обнуляет собственное поле email, если контактов нет (set_primary_email_mobile_no),
+	и без этого заявка теряет адрес почты.
+	"""
 	return {
 		"status": STATUS_NEW,
 		"first_name": data["name"],
 		"email": data["email"],
+		"contacts": [
+			{
+				"full_name": data["name"],
+				"email": data["email"],
+				"is_primary": 1,
+			}
+		],
 		"rca_telegram_id": data.get("telegram_id") or "",
 		"rca_telegram_username": data.get("telegram_username") or "",
 		"rca_utm_source": data.get("utm_source") or "",

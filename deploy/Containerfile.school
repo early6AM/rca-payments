@@ -1,0 +1,37 @@
+# Производный образ для school.rca.yachts.
+#
+# Зачем: securepay.tinkoff.ru отдаёт сертификат, подписанный национальным УЦ
+# Минцифры (Russian Trusted Sub CA -> Russian Trusted Root CA). В стандартном
+# trust store этих корней нет, поэтому Python и curl отвергают цепочку
+# ("self-signed certificate in certificate chain") и платёж не создаётся.
+#
+# Ставим корневые сертификаты в системное хранилище И дописываем их в бандл
+# certifi — именно его использует requests.
+#
+# Файлы с gu-st.ru приходят с CRLF и без завершающего перевода строки:
+# без tr и явного echo при склейке два сертификата слипаются в один и
+# openssl/curl отказываются читать бандл.
+
+FROM frappe-learning:school
+
+USER root
+
+RUN curl -fsSL -o /tmp/ru_root.crt \
+      https://gu-st.ru/content/lending/russian_trusted_root_ca_pem.crt && \
+    curl -fsSL -o /tmp/ru_sub.crt \
+      https://gu-st.ru/content/lending/russian_trusted_sub_ca_pem.crt && \
+    tr -d '\r' < /tmp/ru_root.crt > /usr/local/share/ca-certificates/russian_trusted_root_ca.crt && \
+    tr -d '\r' < /tmp/ru_sub.crt > /usr/local/share/ca-certificates/russian_trusted_sub_ca.crt && \
+    update-ca-certificates && \
+    CERTIFI=$(/home/frappe/frappe-bench/env/bin/python -c "import certifi; print(certifi.where())") && \
+    { cat /usr/local/share/ca-certificates/russian_trusted_root_ca.crt; echo; \
+      cat /usr/local/share/ca-certificates/russian_trusted_sub_ca.crt; echo; } >> "$CERTIFI" && \
+    rm -f /tmp/ru_root.crt /tmp/ru_sub.crt && \
+    echo "CA установлены, certifi: $CERTIFI"
+
+# Фикс установщика приложения: пустая запись настроек не должна падать
+# на обязательных полях (TerminalKey и пароль заполняет администратор).
+# В образе frappe группа пользователя frappe — 0 (root), как и в базовом Containerfile.
+COPY --chown=frappe:0 rca_payments_setup.py /home/frappe/frappe-bench/apps/rca_payments/rca_payments/setup.py
+
+USER frappe
