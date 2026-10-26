@@ -11,6 +11,7 @@ import json
 import frappe
 from frappe.utils import flt
 
+from rca_payments.checkout_rules import STATUS_DECLINED, STATUS_PAID
 from rca_payments.tbank_token import verify_token
 
 PAID_STATUSES = {"CONFIRMED", "AUTHORIZED"}
@@ -130,7 +131,48 @@ def mark_paid(payment, payload):
 	finally:
 		frappe.set_user(session_user)
 
+	# Доступ уже выдан — дальше только витрина CRM.
+	mark_deal_paid(member)
+
 	frappe.db.commit()
+
+
+def mark_deal_paid(member):
+	"""Переводит сделку плательщика в «Оплачено».
+
+	CRM — витрина, а не источник доступа: любая ошибка здесь уходит в Error Log
+	и не пробрасывается дальше, иначе упавшая сделка оставила бы ученицу
+	без оплаченного курса.
+	"""
+	try:
+		if not member or not frappe.db.exists("DocType", "CRM Deal"):
+			return
+
+		if not frappe.db.exists("CRM Deal Status", STATUS_PAID):
+			frappe.log_error(
+				title="TBank: нет статуса «Оплачено»",
+				message=f"В CRM Deal Status нет записи «{STATUS_PAID}» — "
+				f"сделка для {member} осталась в прежнем статусе.",
+			)
+			return
+
+		deals = frappe.get_all(
+			"CRM Deal",
+			filters={"email": member, "status": ["not in", [STATUS_PAID, STATUS_DECLINED]]},
+			pluck="name",
+			order_by="creation desc",
+			limit=1,
+		)
+		if not deals:
+			# Оплата могла прийти по счёту, заведённому в LMS без сделки.
+			return
+
+		frappe.db.set_value("CRM Deal", deals[0], "status", STATUS_PAID, update_modified=False)
+	except Exception:
+		frappe.log_error(
+			title="TBank: не удалось перевести сделку в «Оплачено»",
+			message=frappe.get_traceback(with_context=True),
+		)
 
 
 def reject(reason, payload):
