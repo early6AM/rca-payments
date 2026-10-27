@@ -1,0 +1,130 @@
+{
+ "actions": [],
+ "autoname": "RCA-ACCESS-CLOSE-.#####",
+ "creation": "2026-10-27 16:45:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "member",
+  "member_name",
+  "column_break_person",
+  "course",
+  "course_title",
+  "section_break_dates",
+  "access_until",
+  "closed_on",
+  "column_break_source",
+  "payment",
+  "enrollment",
+  "section_break_note",
+  "note"
+ ],
+ "fields": [
+  {
+   "fieldname": "member",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Ученица",
+   "options": "User",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "member_name",
+   "fieldtype": "Data",
+   "label": "Имя"
+  },
+  {
+   "fieldname": "column_break_person",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "course",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Курс",
+   "options": "LMS Course",
+   "reqd": 1
+  },
+  {
+   "fieldname": "course_title",
+   "fieldtype": "Data",
+   "label": "Название курса"
+  },
+  {
+   "fieldname": "section_break_dates",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "access_until",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Последний день доступа"
+  },
+  {
+   "fieldname": "closed_on",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Закрыт"
+  },
+  {
+   "fieldname": "column_break_source",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payment",
+   "fieldtype": "Link",
+   "label": "Оплата",
+   "options": "LMS Payment"
+  },
+  {
+   "description": "Имя удалённой записи на курс — по нему видно, что именно закрыто.",
+   "fieldname": "enrollment",
+   "fieldtype": "Data",
+   "label": "Запись на курс"
+  },
+  {
+   "fieldname": "section_break_note",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "note",
+   "fieldtype": "Small Text",
+   "label": "Примечание"
+  }
+ ],
+ "links": [],
+ "modified": "2026-10-27 16:45:00.000000",
+ "modified_by": "Administrator",
+ "module": "RCA Payments",
+ "name": "RCA Access Closure",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales User"
+  }
+ ],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "member_name"
+}

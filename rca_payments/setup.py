@@ -5,6 +5,20 @@ import frappe
 
 def after_install():
 	ensure_gateway()
+	ensure_access()
+
+
+def ensure_access():
+	"""Поля срока доступа и настройки — те же шаги, что в патче миграции."""
+	from rca_payments.patches.v1_0.add_access_fields import (
+		ensure_deal_status,
+		ensure_fields,
+		ensure_settings,
+	)
+
+	ensure_fields()
+	ensure_deal_status()
+	ensure_settings()
 
 
 def ensure_gateway():

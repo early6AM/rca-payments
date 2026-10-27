@@ -14,4 +14,19 @@ after_install = "rca_payments.setup.after_install"
 # дойти, если ученица закрыла вкладку или упал обработчик.
 scheduler_events = {
     "hourly": ["rca_payments.tasks.reconcile_pending_payments"],
+    # Срок доступа: за неделю — сделка менеджеру, по истечении — закрытие.
+    "daily": ["rca_payments.access.daily"],
 }
+
+# Срок доступа ставится в момент записи на курс: и после оплаты, и при
+# ручной выдаче. Свои обработчики lms не перетираем — Frappe складывает
+# списки методов из всех приложений.
+doc_events = {
+    "LMS Enrollment": {
+        "before_insert": "rca_payments.access.stamp_enrollment",
+    },
+}
+
+# Фронтенд LMS — собранный бандл без точки расширения, поэтому поле
+# «доступ до …» вставляет наш скрипт в HTML страниц /lms.
+after_request = ["rca_payments.access.inject_notice"]

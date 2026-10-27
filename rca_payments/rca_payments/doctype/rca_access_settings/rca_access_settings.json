@@ -1,0 +1,102 @@
+{
+ "actions": [],
+ "creation": "2026-10-27 16:45:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "access_section",
+  "access_days",
+  "warn_days_before",
+  "column_break_access",
+  "enforce",
+  "manager_section",
+  "manager",
+  "column_break_manager",
+  "renewal_status",
+  "lead_source"
+ ],
+ "fields": [
+  {
+   "fieldname": "access_section",
+   "fieldtype": "Section Break",
+   "label": "Срок доступа"
+  },
+  {
+   "default": "90",
+   "description": "Сколько календарных дней открыт доступ к курсу после оплаты или ручной выдачи. День оплаты считается первым днём.",
+   "fieldname": "access_days",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Дней доступа"
+  },
+  {
+   "default": "7",
+   "description": "За сколько дней до окончания создаётся сделка и задача менеджеру.",
+   "fieldname": "warn_days_before",
+   "fieldtype": "Int",
+   "label": "Предупреждать за дней"
+  },
+  {
+   "fieldname": "column_break_access",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "Выключено — задача только пишет в лог, кого бы закрыла. Включать после проверки.",
+   "fieldname": "enforce",
+   "fieldtype": "Check",
+   "label": "Закрывать доступ по истечении"
+  },
+  {
+   "fieldname": "manager_section",
+   "fieldtype": "Section Break",
+   "label": "Сделка менеджеру"
+  },
+  {
+   "description": "Кому назначаются сделки и задачи о заканчивающемся доступе.",
+   "fieldname": "manager",
+   "fieldtype": "Link",
+   "label": "Ответственный",
+   "options": "User"
+  },
+  {
+   "fieldname": "column_break_manager",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "renewal_status",
+   "fieldtype": "Link",
+   "label": "Статус сделки",
+   "options": "CRM Deal Status"
+  },
+  {
+   "fieldname": "lead_source",
+   "fieldtype": "Link",
+   "label": "Источник сделки",
+   "options": "CRM Lead Source"
+  }
+ ],
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-10-27 16:45:00.000000",
+ "modified_by": "Administrator",
+ "module": "RCA Payments",
+ "name": "RCA Access Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

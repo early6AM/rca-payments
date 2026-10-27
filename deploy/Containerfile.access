@@ -1,0 +1,24 @@
+# Быстрое обновление кода приложения поверх уже собранного образа.
+#
+# Зачем: полная пересборка (bench init + сборка ассетов всех приложений)
+# занимает десятки минут и тянет свежие ветки lms/crm/builder — на живом
+# сайте это лишний риск. Здесь меняется только наше приложение.
+#
+# Сборка из корня репозитория:
+#   docker build -f deploy/Containerfile.access -t frappe-learning:school-ru-access .
+#
+# Источник правды остаётся git: при следующей полной пересборке код
+# приедет из apps.json.
+
+FROM frappe-learning:school-ru
+
+USER root
+
+COPY --chown=frappe:0 rca_payments/ /home/frappe/frappe-bench/apps/rca_payments/rca_payments/
+
+# Старый байткод от предыдущей версии не должен перекрыть новый код.
+RUN find /home/frappe/frappe-bench/apps/rca_payments -name __pycache__ -type d -prune -exec rm -rf {} + ; \
+    find /home/frappe/frappe-bench/apps/rca_payments -name '*.pyc' -delete ; \
+    chown -R frappe:0 /home/frappe/frappe-bench/apps/rca_payments
+
+USER frappe

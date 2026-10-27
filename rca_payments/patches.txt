@@ -1,3 +1,4 @@
 [pre_model_sync]
 
 [post_model_sync]
+rca_payments.patches.v1_0.add_access_fields
